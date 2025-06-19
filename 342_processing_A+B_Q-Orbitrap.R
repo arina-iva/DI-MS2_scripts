@@ -251,6 +251,8 @@ comparison_table_342AB$Isobar_1_aver_err_ppm_sd[iter] <- sd((comp_342A$mz_err_Da
 #average correl value between prec and fragments
 comparison_table_342AB$Isobar_1_cor_aver[iter] <- mean(comp_342A$cor_val, na.rm = TRUE)
 #precision
+comparison_table_342AB$Isobar_1_precision[iter] <-  
+  sum(comp_342A$int_reconstr[!is.na(comp_342A$int_reconstr) & !is.na (comp_342A$int_ref)])/sum(comp_342A$int_reconstr[!is.na(comp_342A$int_reconstr)])
 
 
 ##fill put comparison table for isobar 2
@@ -265,6 +267,8 @@ comparison_table_342AB$Isobar_2_aver_err_ppm[iter] <- mean((comp_342B$mz_err_Da/
 comparison_table_342AB$Isobar_2_aver_err_ppm_sd[iter] <- sd((comp_342B$mz_err_Da/comp_342B$mz_theor*10^6), na.rm = TRUE)
 comparison_table_342AB$Isobar_2_cor_aver[iter] <- mean(comp_342B$cor_val, na.rm = TRUE)
 comparison_table_342AB$Isobar_2_incorr_int[iter] <- sum(comp_342B$int_reconstr[is.na(comp_342B$mz_theor)])/sum(ref_342B_defNCE_int$int_ref)
+comparison_table_342AB$Isobar_2_precision[iter] <-  
+  sum(comp_342B$int_reconstr[!is.na(comp_342B$int_reconstr) & !is.na (comp_342B$int_ref)])/sum(comp_342B$int_reconstr[!is.na(comp_342B$int_reconstr)])
 
 write.csv(comparison_table_342AB, "C:/Users/aivanova/Documents/Orbitrap Data/settings comparison/Orbi_Exploris/342_settings_comparison/342A+B/342AB_comparison_table_inprog.csv")
 
