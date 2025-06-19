@@ -232,7 +232,7 @@ comparison_table_342AB$Isobar_1_corr_peaks[iter] <-
 #number of peaks missing in reconstr spectra
 comparison_table_342AB$Isobar_1_unassign_peaks[iter] <- 
   length(comp_342A$int_ref) - sum(!is.na(comp_342A$int_reconstr) & !is.na(comp_342A$mz_theor)) 
-#sum int of correctly assigned peaks compare to ref intensity
+#sum int of correctly assigned peaks compare to ref intensity = recall
 comparison_table_342AB$Isobar_1_assign_int[iter] <-
   sum(comp_342A$int_ref[!is.na(comp_342A$int_reconstr) & !is.na (comp_342A$int_ref)])/sum(comp_342A$int_ref, na.rm = TRUE) 
 #number of incorrectly assigned peaks
@@ -250,6 +250,8 @@ comparison_table_342AB$Isobar_1_aver_err_ppm[iter] <- mean((comp_342A$mz_err_Da/
 comparison_table_342AB$Isobar_1_aver_err_ppm_sd[iter] <- sd((comp_342A$mz_err_Da/comp_342A$mz_theor*10^6), na.rm = TRUE)
 #average correl value between prec and fragments
 comparison_table_342AB$Isobar_1_cor_aver[iter] <- mean(comp_342A$cor_val, na.rm = TRUE)
+#precision
+
 
 ##fill put comparison table for isobar 2
 comparison_table_342AB$Isobar_2_corr_peaks[iter] <- sum(!is.na(comp_342B$int_reconstr[!is.na(comp_342B$mz_theor)]))
