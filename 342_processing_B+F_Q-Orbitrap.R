@@ -223,7 +223,7 @@ comparison_table_342BF$time[iter] <- as.numeric(header(msExp)$retentionTime[leng
 comparison_table_342BF$Isobar_1_corr_peaks[iter] <- sum(!is.na(comp_342B$int_reconstr))
 #number of peaks missing in reconstr spectra
 comparison_table_342BF$Isobar_1_unassign_peaks[iter] <- length(comp_342B$int_ref) - sum(!is.na(comp_342B$int_reconstr))
-#sum int of correctly assigned peaks compare to ref intensity
+#sum int of correctly assigned peaks compare to ref intensity = recall
 comparison_table_342BF$Isobar_1_assign_int[iter] <-
   sum(comp_342B$int_ref[!is.na(comp_342B$int_reconstr) & !is.na (comp_342B$int_ref)])/sum(comp_342B$int_ref, na.rm = TRUE)
 #number of incorrectly assigned peaks
@@ -241,6 +241,10 @@ comparison_table_342BF$Isobar_1_cor_aver[iter] <- mean(comp_342B$cor_val, na.rm 
 #sum intensity of incorrectly assigned peaks in ref spectra
 comparison_table_342BF$Isobar_1_incorr_int[iter] <- 
   sum(comp_342B$int_reconstr[is.na(comp_342B$mz_theor)])/sum(ref_342B_defNCE_int$int_ref)
+#precision
+comparison_table_342AB$Isobar_1_precision[iter] <-  
+  sum(comp_342B$int_reconstr[!is.na(comp_342B$int_reconstr) & !is.na (comp_342B$int_ref)])/sum(comp_342B$int_reconstr[!is.na(comp_342B$int_reconstr)])
+
 
 ##fill put comparison table for isobar 2
 comparison_table_342BF$Isobar_2_corr_peaks[iter] <- sum(!is.na(comp_342F$int_reconstr))
@@ -254,6 +258,8 @@ comparison_table_342BF$Isobar_2_aver_err_ppm[iter] <- mean((comp_342F$mz_err_Da/
 comparison_table_342BF$Isobar_2_aver_err_ppm_sd[iter] <- sd((comp_342F$mz_err_Da/comp_342F$mz_theor*10^6), na.rm = TRUE)
 comparison_table_342BF$Isobar_2_cor_aver[iter] <- mean(comp_342F$cor_val, na.rm = TRUE)
 comparison_table_342BF$Isobar_2_incorr_int[iter] <- sum(comp_342F$int_reconstr[is.na(comp_342F$mz_theor)])/sum(ref_342F_defNCE_int$int_ref)
+comparison_table_342AB$Isobar_2_precision[iter] <-  
+  sum(comp_342F$int_reconstr[!is.na(comp_342F$int_reconstr) & !is.na (comp_342F$int_ref)])/sum(comp_342F$int_reconstr[!is.na(comp_342F$int_reconstr)])
 
 write.csv(comparison_table_342BF, "./342_settings_comparison/342B+F/342BF_comparison_table_inprog.csv")
 ##Iteration is finished!
