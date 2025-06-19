@@ -214,11 +214,11 @@ comparison_table_342BF$time[iter] <- as.numeric(header(msExp)$retentionTime[leng
 ##fill out comparison table  for isobar 1
 
 #number of cor assigned peaks
-comparison_table_342BF$Isobar_1_corr_peaks[iter] <- sum(!is.na(comp_342B$int_reconstr))
+comparison_table_342BF$Isobar_1_corr_peaks[iter] <-  sum(!is.na(comp_342B$int_reconstr[!is.na(comp_342B$mz_theor)]))
 #number of peaks missing in reconstr spectra
 comparison_table_342BF$Isobar_1_unassign_peaks[iter] <- 
   length(comp_342B$int_ref) - sum(!is.na(comp_342B$int_reconstr) & !is.na(comp_342B$mz_theor))
-#sum int of correctly assigned peaks compare to ref intensity
+#sum int of correctly assigned peaks compare to ref intensity = recall
 comparison_table_342BF$Isobar_1_assign_int[iter] <-
   sum(comp_342B$int_ref[!is.na(comp_342B$int_reconstr) & !is.na (comp_342B$int_ref)])/sum(comp_342B$int_ref, na.rm = TRUE)
 #number of incorrectly assigned peaks
@@ -236,11 +236,14 @@ comparison_table_342BF$Isobar_1_aver_err_ppm[iter] <- mean((comp_342B$mz_err_Da/
 comparison_table_342BF$Isobar_1_aver_err_ppm_sd[iter] <- sd((comp_342B$mz_err_Da/comp_342B$mz_theor*10^6), na.rm = TRUE)
 #average correl value between prec and fragments
 comparison_table_342BF$Isobar_1_cor_aver[iter] <- mean(comp_342B$cor_val, na.rm = TRUE)
+#precision
+comparison_table_342AB$Isobar_1_precision[iter] <-  
+  sum(comp_342B$int_reconstr[!is.na(comp_342B$int_reconstr) & !is.na (comp_342B$int_ref)])/sum(comp_342B$int_reconstr[!is.na(comp_342B$int_reconstr)])
 
 
 
 ##fill put comparison table for isobar 2 - same parameters
-comparison_table_342BF$Isobar_2_corr_peaks[iter] <- sum(!is.na(comp_342F$int_reconstr))
+comparison_table_342BF$Isobar_2_corr_peaks[iter] <-  sum(!is.na(comp_342F$int_reconstr[!is.na(comp_342F$mz_theor)]))
 comparison_table_342BF$Isobar_2_unassign_peaks[iter] <- length(comp_342F$int_ref) - sum(!is.na(comp_342F$int_reconstr))
 comparison_table_342BF$Isobar_2_assign_int[iter] <- sum(comp_342F$int_ref[!is.na(comp_342F$int_reconstr) & !is.na (comp_342F$int_ref)])/sum(comp_342F$int_ref, na.rm = TRUE)
 comparison_table_342BF$Isobar_2_incorr_peaks[iter] <- sum(is.na(comp_342F$mz_theor), na.rm = TRUE)
@@ -251,6 +254,9 @@ comparison_table_342BF$Isobar_2_aver_err_mDa_sd[iter] <- sd(comp_342F$mz_err_Da,
 comparison_table_342BF$Isobar_2_aver_err_ppm[iter] <- mean((comp_342F$mz_err_Da/comp_342F$mz_theor*10^6), na.rm = TRUE)
 comparison_table_342BF$Isobar_2_aver_err_ppm_sd[iter] <- sd((comp_342F$mz_err_Da/comp_342F$mz_theor*10^6), na.rm = TRUE)
 comparison_table_342BF$Isobar_2_cor_aver[iter] <- mean(comp_342F$cor_val, na.rm = TRUE)
+comparison_table_342AB$Isobar_2_precision[iter] <-  
+  sum(comp_342F$int_reconstr[!is.na(comp_342F$int_reconstr) & !is.na (comp_342F$int_ref)])/sum(comp_342F$int_reconstr[!is.na(comp_342F$int_reconstr)])
+
 
 #save results
 write.csv(comparison_table_342BF, "./342_settings_comparison/342B+F/342BF_comparison_table_inprog.csv")
