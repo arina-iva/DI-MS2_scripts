@@ -215,11 +215,11 @@ comparison_table_180EG$time[iter] <- as.numeric(header(msExp)$retentionTime[leng
 
 ##fill out comparison table for isobar 1
 #number of cor assigned peaks
-comparison_table_180EG$Isobar_1_corr_peaks[iter] <- sum(!is.na(comp_180E$int_reconstr))
+comparison_table_180EG$Isobar_1_corr_peaks[iter] <- sum(!is.na(comp_180E$int_reconstr)) & !is.na(comp_180G$int_ref))
 #number of peaks missing in reconstr spectra
 comparison_table_180EG$Isobar_1_unassign_peaks[iter] <- 
   length(comp_180E$int_ref) - sum(!is.na(comp_180E$int_reconstr)& !is.na(comp_180E$mz_theor))
-#sum int of correctly assigned peaks compare to ref intensity
+#sum int of correctly assigned peaks compare to ref intensity = recall
 comparison_table_180EG$Isobar_1_assign_int[iter] <-
   sum(comp_180E$int_ref[!is.na(comp_180E$int_reconstr) & !is.na (comp_180E$int_ref)])/sum(comp_180E$int_ref, na.rm = TRUE)
 #number of incorrectly assigned peaks
@@ -236,6 +236,10 @@ comparison_table_180EG$Isobar_1_aver_err_ppm_sd[iter] <- sd((comp_180E$mz_err_Da
 comparison_table_180EG$Isobar_1_cor_aver[iter] <- mean(comp_180E$cor_val, na.rm = TRUE)
 #sum intensity of incorrectly assigned peaks compare to ref spectra
 comparison_table_180EG$Isobar_1_incorr_int[iter] <- sum(comp_180E$int_reconstr[is.na(comp_180E$mz_theor)])/sum(ref_180E_defNCE_int$int_ref)
+# precision
+comparison_table_180EG$Isobar_1_precision[iter] <-  
+  sum(comp_180E$int_reconstr[!is.na(comp_180E$int_reconstr) & !is.na (comp_180E$int_ref)])/sum(comp_180E$int_reconstr[!is.na(comp_180E$int_reconstr)])
+
 
 ##fill put comparison table for isobar 2
 comparison_table_180EG$Isobar_2_corr_peaks[iter] <- sum(!is.na(comp_180G$int_reconstr) & !is.na(comp_180G$int_ref))
@@ -249,6 +253,8 @@ comparison_table_180EG$Isobar_2_aver_err_ppm[iter] <- mean((comp_180G$mz_err_Da/
 comparison_table_180EG$Isobar_2_aver_err_ppm_sd[iter] <- sd((comp_180G$mz_err_Da/comp_180G$mz_theor*10^6), na.rm = TRUE)
 comparison_table_180EG$Isobar_2_cor_aver[iter] <- mean(comp_180G$cor_val, na.rm = TRUE)
 comparison_table_180EG$Isobar_2_incorr_int[iter] <- sum(comp_180G$int_reconstr[is.na(comp_180G$mz_theor)])/sum(ref_180G_defNCE_int$int_ref)
+comparison_table_180EG$Isobar_2_precision[iter] <-  
+  sum(comp_180G$int_reconstr[!is.na(comp_180G$int_reconstr) & !is.na (comp_180G$int_ref)])/sum(comp_180G$int_reconstr[!is.na(comp_180G$int_reconstr)])
 
 write.csv(comparison_table_180EG, "C:/Users/aivanova/Documents/Orbitrap Data/settings comparison/180_settings_comparison/180E+G/180EG_comparison_table_inprog.csv")
 ##Iteration is finished!
