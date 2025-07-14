@@ -4,6 +4,10 @@ library(mzR)
 library(msdata)
 library(dplyr)
 
+## Paper: Enhancing Chimeric Fragmentation Spectra Deconvolution using Direct Infusion – Tandem Mass Spectrometry across High-Resolution Mass Spectrometric  Platforms
+##
+## Authors: Wei Tang, Arina Ivanova
+## Date: 01/07/2025
 
 #' Get scan number of MS2 (centroided) from the mzML data
 #' 
