@@ -1,3 +1,8 @@
+## Paper: Enhancing Chimeric Fragmentation Spectra Deconvolution using Direct Infusion – Tandem Mass Spectrometry across High-Resolution Mass Spectrometric  Platforms
+##
+## Authors: Wei Tang, Arina Ivanova
+## Date: 01/07/2025
+
 #' Calculate the mass deviation between two values
 #' 
 #' @param refMz m/z value
