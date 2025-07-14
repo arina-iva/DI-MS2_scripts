@@ -8,7 +8,12 @@ library(forcats)
 library(grid)
 library(mzR)
 library(msdata)
-
+## ----------------------------------------------------------------
+## Paper: Enhancing Chimeric Fragmentation Spectra Deconvolution using Direct Infusion – Tandem Mass Spectrometry across High-Resolution Mass Spectrometric  Platforms
+##
+## Authors: Wei Tang, Arina Ivanova
+## Date: 01/07/2025
+## ----------------------------------------------------------------
 #####################################################################################################################################
 # FIGURE 3
 # INTENSITY MODULATION PATTERNS
