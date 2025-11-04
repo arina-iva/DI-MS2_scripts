@@ -109,123 +109,197 @@ getRowNumber <- function(l) {
 }
 
 def_180_el <- openMSfile("./180_settings_comparison/180E+G/1-180E+G_default.mzML")
-ms2_180_el <- isoWinPrecursorPlot_data(real_precursors_180, formulas_180, def_180_el, c(1:81), 6)
+precursors_fragm_180EG <- c(181.064141, 102.0550, 181.085921, 135.0442)
+formulas_180EG_prec_frag <- c("180E (181.064141)", "180E fragment", "180G (181.085921)", "180G fragment")
+ms2_180_el <- isoWinPrecursorPlot_data(precursors_fragm_180EG, formulas_180EG_prec_frag, def_180_el, c(1:81), 6) %>%
+  mutate(
+    Type = if_else(str_detect(Peak, "fragment"), "fragment", "precursor"),
+    Compound = str_extract(Peak, "^[0-9]+[A-Z]")
+  )
 
-def_el_180EG <- ggplot(data=ms2_180_el, aes(x=Scan, y=Normalized_Intensity, color=Peak)) +
-  geom_point() + geom_line() +
+ms2_180_el_scaled <- ms2_180_el%>%
+  mutate(Scaled_Intensity = case_when(Type == "fragment" ~ Normalized_Intensity +0.25,
+                                      Type == "precursor" ~ Normalized_Intensity))
+
+def_el_180EG <- ggplot(data=ms2_180_el_scaled, aes(x=Scan, y=Scaled_Intensity, color=Compound)) +
+  geom_point(aes(shape = Type), size = 3) + geom_line(aes(linetype = Type)) +
   theme(text = element_text(size = 15),
         plot.title = element_text(size = 17),
         axis.title = element_text(size = 13),
         panel.background = element_blank(), 
         axis.line = element_line(colour = "black"),
         legend.position = 'right') +
+  scale_shape_manual(values = c(2, 1)) +
+  scale_linetype_manual(values = c(2, 1)) +
   scale_color_manual(values=color_180 ) +
   #scale_y_continuous(labels = scientific_10)+
   ggtitle('Orbitrap Elite')+
-  ylab("Normalized intensity")+
+  ylab("Scaled intensity")+
   xlab("Scan number")+
-  labs(color = "Isobaric compound")
-
+  labs(color = element_blank())
 
 ## 342 A+B
+precursors_fragm_342AB <- c(343.074706, 152.0582, 343.081231, 108.056966)
+formulas_342AB_prec_frag <- c("342A (343.074706)", "342A fragment (152.0582)", '342B (343.0812)', "342B fragment (108.0570)")
 
 def_342AB_el <- openMSfile("./342_settings_comparison/342A+B/342A+B_3microsc.mzML")
-ms2_342AB_el <- isoWinPrecursorPlot_data(real_precursors_342AB, formulas_342AB, def_342AB_el, c(1:81), 8)
 
-def_el_342AB <- ggplot(data=ms2_342AB_el, aes(x=Scan, y=Normalized_Intensity, color=Peak)) +
-  geom_point() + geom_line() +
+ms2_342AB_el <- isoWinPrecursorPlot_data(precursors_fragm_342AB, formulas_342AB_prec_frag, def_342AB_el, c(1:81), 8)
+
+ms2_342AB_el <- ms2_342AB_el %>%
+  mutate(
+  Type = if_else(str_detect(Peak, "fragment"), "fragment", "precursor"),
+  Compound = str_extract(Peak, "^[0-9]+[A-Z]")
+)
+
+ms2_342AB_el_scaled <- ms2_342AB_el%>%
+  mutate(Scaled_Intensity = case_when(Type == "fragment" ~ Normalized_Intensity +0.25,
+                                    Type == "precursor" ~ Normalized_Intensity))
+
+def_el_342AB <- ggplot(data=ms2_342AB_el_scaled, aes(x=Scan, y=Scaled_Intensity, color=Compound)) +
+  geom_point(aes(shape = Type), size = 3) + geom_line(aes(linetype = Type)) +
   theme(text = element_text(size = 15),
         plot.title = element_text(size = 17),
         axis.title = element_text(size = 13),
         panel.background = element_blank(), 
         axis.line = element_line(colour = "black"),
         legend.position = 'right') +
+  scale_shape_manual(values = c(2, 1)) +
+  scale_linetype_manual(values = c(2, 1)) +
   scale_color_manual(values=color_342AB) +
   #scale_y_continuous(labels = scientific_10)+
   ggtitle('Orbitrap Elite: 342A+B')+
-  ylab("Normalized intensity")+
+  ylab("Scaled intensity")+
   xlab("Scan number")+
   labs(color = "Isobaric compound")
 
 ## 342B+F
-def_342BF_el <- openMSfile("./342_settings_comparison/342B+F/1-342B+F_default.mzML")
-ms2_342BF_el <- isoWinPrecursorPlot_data(real_precursors_342BF, formulas_342BF, def_342BF_el, c(1:81), 8)
+precursors_fragm_342BF <- c(343.081231, 108.056966, 343.12885, 207.076419)
 
-def_el_342BF <- ggplot(data=ms2_342BF_el, aes(x=Scan, y=Normalized_Intensity, color=Peak)) +
-  geom_point() + geom_line() +
+formulas_342BF_prec_frag <- c('342B (343.0812)', "342B fragment (108.0570)", "342F (343.1288)", "342F fragment (207.0764)")
+
+def_342BF_el <- openMSfile("./342_settings_comparison/342B+F/1-342B+F_default.mzML")
+ms2_342BF_el <- isoWinPrecursorPlot_data(precursors_fragm_342BF, formulas_342BF_prec_frag, def_342BF_el, c(1:81), 8)
+
+ms2_342BF_el <- ms2_342BF_el %>%
+  mutate(
+    Type = if_else(str_detect(Peak, "fragment"), "fragment", "precursor"),
+    Compound = str_extract(Peak, "^[0-9]+[A-Z]")
+  )
+
+ms2_342BF_el_scaled <- ms2_342BF_el %>%
+  mutate(Scaled_Intensity = case_when(Type == "fragment" ~ Normalized_Intensity +0.25,
+                                    Type == "precursor" ~ Normalized_Intensity))
+
+def_el_342BF <- ggplot(data=ms2_342BF_el_scaled, aes(x=Scan, y=Scaled_Intensity, color=Compound)) +
+  geom_point(aes(shape = Type), size = 3) + geom_line(aes(linetype = Type)) +
   theme(text = element_text(size = 15),
         plot.title = element_text(size = 17),
         axis.title = element_text(size = 13),
         panel.background = element_blank(), 
         axis.line = element_line(colour = "black"),
         legend.position = 'right') +
+  scale_shape_manual(values = c(2, 1)) +
+  scale_linetype_manual(values = c(2, 1)) +
   scale_color_manual(values=color_342BF) +
   #scale_y_continuous(labels = scientific_10)+
   ggtitle('Orbitrap Elite: 342B+342F')+
-  ylab("Normalized intensity")+
+  ylab("Scaled intensity")+
   xlab("Scan number")+
-  labs(color = "Isobaric compound")
-
-
+  labs(color = element_blank())
 ## 2 Orbitrap Exploris
 def_180_ex <- openMSfile("./Orbi_Exploris/180_settings_comparison/180E+G/1-180E+G_default_29.mzML")
 
-ms2_180_ex <- isoWinPrecursorPlot_data(real_precursors_180, formulas_180, def_180_ex, c(82:163), 5)
+ms2_180_ex <- isoWinPrecursorPlot_data(precursors_fragm_180EG, formulas_3180EG_prec_frag, def_180_ex, c(82:163), 5)%>%
+  mutate(
+  Type = if_else(str_detect(Peak, "fragment"), "fragment", "precursor"),
+  Compound = str_extract(Peak, "^[0-9]+[A-Z]")
+)
 
-def_ex_180EG <- ggplot(data=ms2_180_ex, aes(x=Scan, y=Normalized_Intensity, color=Peak)) +
-  geom_point() + geom_line() +
+ms2_180_ex_scaled <- ms2_180_ex%>%
+  mutate(Scaled_Intensity = case_when(Type == "fragment" ~ Normalized_Intensity + 0.25,
+                                      Type == "precursor" ~ Normalized_Intensity))
+
+def_ex_180EG <- ggplot(data=ms2_180_ex_scaled, aes(x=Scan, y=Scaled_Intensity, color=Compound)) +
+  geom_point(aes(shape = Type), size = 3) + geom_line(aes(linetype = Type)) +
   theme(text = element_text(size = 15),
         plot.title = element_text(size = 17),
         axis.title = element_text(size = 13),
         panel.background = element_blank(), 
         axis.line = element_line(colour = "black"),
         legend.position = 'right') +
+  scale_shape_manual(values = c(2, 1)) +
+  scale_linetype_manual(values = c(2, 1)) +
   scale_color_manual(values=color_180 ) +
   #scale_y_continuous(labels = scientific_10)+
   ggtitle('Orbitrap Exploris')+
-  ylab("Normalized intensity")+
+  ylab("Scaled intensity")+
   xlab("Scan number")+
-  labs(color = "Isobaric compound")
-
+  labs(color = element_blank())
 ## 342 A+B
 
 def_342AB_ex <- openMSfile("./Orbi_Exploris/342_settings_comparison/342A+B/1-342A+B_default_03.mzML")
 
-ms2_342AB_ex <- isoWinPrecursorPlot_data(real_precursors_342AB, formulas_342AB, def_342AB_ex, c(81:163), 4)
+ms2_342AB_ex <- isoWinPrecursorPlot_data(precursors_fragm_342AB, formulas_342AB_prec_frag, def_342AB_ex, c(82:162), 4)
 
-def_ex_342AB <- ggplot(data=ms2_342AB_ex, aes(x=Scan, y=Normalized_Intensity, color=Peak)) +
-  geom_point() + geom_line() +
+ms2_342AB_ex <- ms2_342AB_ex%>%
+  mutate(
+  Type = if_else(str_detect(Peak, "fragment"), "fragment", "precursor"),
+  Compound = str_extract(Peak, "^[0-9]+[A-Z]")
+)
+
+ms2_342AB_ex_scaled <- ms2_342AB_ex%>%
+  mutate(Scaled_Intensity = case_when(Type == "fragment" ~ Normalized_Intensity +0.25,
+                                      Type == "precursor" ~ Normalized_Intensity))
+
+def_ex_342AB <- ggplot(data=ms2_342AB_ex_scaled, aes(x=Scan, y=Scaled_Intensity, color=Compound)) +
+  geom_point(aes(shape = Type), size = 3) + geom_line(aes(linetype = Type)) +
   theme(text = element_text(size = 15),
         plot.title = element_text(size = 17),
         axis.title = element_text(size = 13),
         panel.background = element_blank(), 
         axis.line = element_line(colour = "black"),
         legend.position = 'right') +
+  scale_shape_manual(values = c(2, 1)) +
+  scale_linetype_manual(values = c(2, 1)) +
   scale_color_manual(values=color_342AB) +
   #scale_y_continuous(labels = scientific_10)+
   ggtitle('Orbitrap Exploris: 342A+342B')+
-  ylab("Normalized intensity")+
+  ylab("Scaled intensity")+
   xlab("Scan number")+
   labs(color = "Isobaric compound")
 
 ## 342B+F
 def_342BF_ex <- openMSfile("./Orbi_Exploris/342_settings_comparison/342B+F/1-342B+F_default_05.mzML")
-ms2_342BF_ex <- isoWinPrecursorPlot_data(real_precursors_342BF, formulas_342BF, def_342BF_ex, c(82:162), 5)
+ms2_342BF_ex <- isoWinPrecursorPlot_data(precursors_fragm_342BF, formulas_342BF_prec_frag, def_342BF_ex, c(82:162), 5)
 
-def_ex_342BF <- ggplot(data=ms2_342BF_ex, aes(x=Scan, y=Normalized_Intensity, color=Peak)) +
-  geom_point() + geom_line() +
+
+ms2_342BF_ex <- ms2_342BF_ex %>%
+  mutate(
+    Type = if_else(str_detect(Peak, "fragment"), "fragment", "precursor"),
+    Compound = str_extract(Peak, "^[0-9]+[A-Z]")
+  )
+
+ms2_342BF_ex_scaled <- ms2_342BF_ex %>%
+  mutate(Scaled_Intensity = case_when(Type == "fragment" ~ Normalized_Intensity + 0.25,
+                                      Type == "precursor" ~ Normalized_Intensity))
+
+def_ex_342BF <-ggplot(data=ms2_342BF_ex_scaled, aes(x=Scan, y=Scaled_Intensity, color=Compound)) +
+  geom_point(aes(shape = Type), size = 3) + geom_line(aes(linetype = Type)) +
   theme(text = element_text(size = 15),
         plot.title = element_text(size = 17),
         axis.title = element_text(size = 13),
         panel.background = element_blank(), 
         axis.line = element_line(colour = "black"),
         legend.position = 'right') +
-  scale_color_manual(values=color_342BF) + 
+  scale_shape_manual(values = c(2, 1)) +
+  scale_linetype_manual(values = c(2, 1)) +
+  scale_color_manual(values=color_342BF) +
   #scale_y_continuous(labels = scientific_10)+
   ggtitle('Orbitrap Exploris')+
-  ylab("Normalized intensity")+
+  ylab("Scaled intensity")+
   xlab("Scan number")+
-  labs(color = "Isobaric compound")
+  labs(color = element_blank())
 
 theme_combplot_top <- theme(axis.title = element_blank(), ##for combined plot
                             axis.text.y = element_blank(),##for combined plot
@@ -237,13 +311,21 @@ theme_combplot_bottom <- theme(axis.title.y = element_blank(), ##for combined pl
                                axis.ticks.y = element_blank(),
                                axis.line.y = element_blank())
 
-
-Figure3 <- ((def_el_342AB  + theme(axis.title = element_blank())) + (def_el_180EG + theme_combplot_top) + (def_el_342BF + theme_combplot_top)) /
-  ((def_ex_342AB + theme(axis.title = element_blank())) + (def_ex_180EG + theme_combplot_top)+ (def_ex_342BF+ theme_combplot_top))+
+Figure3 <- ((def_ex_342AB  + theme(axis.title = element_blank())+ scale_y_continuous(breaks=c(0,0.5, 1))) + 
+              (def_ex_180EG + theme_combplot_top) + (def_ex_342BF + theme_combplot_top)) /
+  ((def_el_342AB + theme(axis.title = element_blank()) + scale_y_continuous(breaks=c(0,0.5, 1))) + 
+     (def_el_180EG + theme_combplot_top)+ (def_el_342BF+ theme_combplot_top))+
   plot_layout(guides = "collect") & 
   theme(legend.position = 'right',
-        legend.title = element_blank(),
-        plot.title = element_blank())
+        legend.title = element_text(size = 16),
+        legend.text = element_text(size = 14),
+        plot.title = element_blank(),
+        axis.text = element_text(size = 12),
+        panel.background = element_rect(fill='transparent'), #transparent panel bg
+        plot.background = element_rect(fill='transparent', color=NA), #transparent plot bg
+        panel.grid.major = element_blank(), #remove major gridlines
+        panel.grid.minor = element_blank(), #remove minor gridlines
+        legend.background = element_rect(fill='transparent'), #transparent legend bg
 
 ##################################################################################################################################################
 # FIGURE 4
@@ -756,3 +838,4 @@ Figure_6 <- ggplot(data_combined, aes(x = Settings, y = average_time, group = In
                          name = "Average similarity score")+
   ylab("Time, s")+
   ylim(0, 800)
+
